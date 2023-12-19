@@ -24,16 +24,39 @@ const criarDiv = (texto) => {
 
 }
 //Esta função exibir mostrará as letras na telas.
-const exibir = (sons)=>{
+const exibir = (sons) => {
     //Com o Objecto criaremos outro objeto!
     Object.keys(sons).forEach(criarDiv);
 }
 exibir(sons)
 //-----------------------------------------//
+const tocarSom = (letra) => {
+    const audio = new Audio(`./sounds/${sons[letra]}`);
+    audio.play();
+}
+const adicionarEfeito = (letra) => document.getElementById(letra)
+    .classList.add('active');
+
+const removeEfeito = () => {
+    const div = document.getElementById(letra);
+    const removeActive = () => div.classList.remove('active');
+    div.addEventListener('transtionend', removeActive);
+};
+
 //As instrução abaixo são para capturar as div das letras.
-const ativarDiv = document.getElementById('container');
-ativarDiv.addEventListener('click',(evento)=>{
-    const letra = evento.target.id;
-    //console.log(letra)
-    tocarSom(letra);
-})
+const ativarDiv = (evento) => {
+    let letra = '';
+    if (evento.type == 'click') {
+        letra = evento.target.id;
+    } else {
+        letra = evento.key.toUpperCase();
+    }
+    const letraPermitida = sons.hasOwnProperty(letra);
+    if (letraPermitida) {
+        adicionarEfeito(letra);
+        tocarSom(letra);
+        removeActive();
+    }
+}
+document.getElementById('container').addEventListener('click', ativarDiv);
+window.addEventListener('keydown',ativarDiv);
